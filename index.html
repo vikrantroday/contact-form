@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact Details</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --ink: #1a1714; --paper: #f5f0e8; --cream: #ede7d9; --warm-mid: #c8b89a;
+    --accent: #8b6f47; --accent-dark: #5c4a30; --muted: #9a8e80;
+    --error: #c0392b; --success: #2e7d5a; --input-bg: #fdfaf5;
+    --border: #d5c9b8; --border-focus: #8b6f47;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--paper);
+    min-height: 100vh;
+    display: flex; align-items: flex-start; justify-content: center;
+    padding: 2rem 1rem;
+    background-image:
+      radial-gradient(ellipse at 20% 50%, rgba(139,111,71,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 20%, rgba(139,111,71,0.04) 0%, transparent 50%);
+  }
+  .container { width: 100%; max-width: 620px; animation: fadeUp 0.5s ease both; }
+  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+
+  .header { margin-bottom: 2rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+  .header-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
+  .header h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); line-height: 1.2; }
+  .header p { margin-top: 0.4rem; font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+  .btn-report {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent-dark); background: transparent;
+    border: 1px solid var(--accent); border-radius: 3px;
+    padding: 0 1.25rem; height: 38px; cursor: pointer;
+    transition: background 0.2s, color 0.2s; white-space: nowrap; align-self: flex-start; margin-top: 4px;
+  }
+  .btn-report:hover { background: var(--accent); color: var(--input-bg); }
+
+  .form-card {
+    background: #fdfaf5; border: 1px solid var(--border); border-radius: 4px;
+    padding: 2.25rem; position: relative;
+  }
+  .form-card::before {
+    content: ''; position: absolute;
+    top: 6px; left: 6px; right: -6px; bottom: -6px;
+    border: 1px solid var(--cream); border-radius: 4px; z-index: -1;
+  }
+  .form-section { margin-bottom: 1.75rem; }
+  .section-label {
+    font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--warm-mid); margin-bottom: 1.1rem; padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--cream);
+  }
+  .field { margin-bottom: 1.15rem; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.35rem; }
+  label span.req { color: var(--accent); margin-left: 2px; }
+  input, select {
+    width: 100%; height: 44px; padding: 0 0.85rem;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
+    color: var(--ink); background: var(--input-bg);
+    border: 1px solid var(--border); border-radius: 3px; outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none; -webkit-appearance: none;
+  }
+  input::placeholder { color: var(--warm-mid); font-weight: 300; }
+  input:focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(139,111,71,0.1); }
+  input:hover, select:hover { border-color: var(--accent); }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b6f47' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat; background-position: right 0.85rem center;
+    padding-right: 2.25rem; cursor: pointer;
+  }
+  select option { color: var(--ink); background: #fff; }
+  .phone-row { display: grid; grid-template-columns: 140px 1fr; gap: 8px; }
+  .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-hint { font-size: 11px; color: var(--muted); margin-top: 0.3rem; }
+  .field-error { font-size: 11px; color: var(--error); margin-top: 0.3rem; display: none; }
+  input.error, select.error { border-color: var(--error); }
+  input.valid { border-color: var(--success); }
+  .divider { height: 1px; background: var(--cream); margin: 1.5rem 0; }
+  .submit-row { display: flex; align-items: center; justify-content: space-between; margin-top: 1.75rem; flex-wrap: wrap; gap: 0.75rem; }
+  .submit-note { font-size: 11px; color: var(--muted); }
+  .btn-submit {
+    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--input-bg); background: var(--accent-dark);
+    border: none; border-radius: 3px; padding: 0 2rem; height: 44px;
+    cursor: pointer; transition: background 0.2s, transform 0.1s;
+  }
+  .btn-submit:hover { background: var(--accent); }
+  .btn-submit:active { transform: scale(0.98); }
+  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .success-banner {
+    display: none; background: #edf7f2; border: 1px solid #a3d4bb;
+    border-radius: 3px; padding: 0.85rem 1.25rem; margin-top: 1.25rem;
+    font-size: 13px; color: var(--success); font-weight: 500; text-align: center;
+  }
+  .error-banner {
+    display: none; background: #fef0ef; border: 1px solid #f5b8b8;
+    border-radius: 3px; padding: 0.85rem 1.25rem; margin-top: 1.25rem;
+    font-size: 13px; color: var(--error); font-weight: 500; text-align: center;
+  }
+
+  /* Report */
+  #reportPanel { display: none; margin-top: 1.5rem; }
+  .report-card {
+    background: #fdfaf5; border: 1px solid var(--border); border-radius: 4px;
+    padding: 2rem; position: relative;
+  }
+  .report-card::before {
+    content: ''; position: absolute;
+    top: 6px; left: 6px; right: -6px; bottom: -6px;
+    border: 1px solid var(--cream); border-radius: 4px; z-index: -1;
+  }
+  .report-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
+  .report-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--ink); }
+  .report-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .report-close { background: transparent; border: none; font-size: 18px; color: var(--muted); cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 3px; }
+  .report-close:hover { background: var(--cream); color: var(--ink); }
+  .report-empty { text-align: center; padding: 2.5rem 1rem; font-size: 14px; color: var(--muted); }
+  .report-loading { text-align: center; padding: 2rem; font-size: 13px; color: var(--muted); }
+  .report-table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 520px; }
+  thead tr { border-bottom: 2px solid var(--cream); }
+  thead th { text-align: left; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--warm-mid); padding: 0 0.75rem 0.6rem; white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--cream); transition: background 0.12s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(139,111,71,0.04); }
+  tbody td { padding: 0.7rem 0.75rem; color: var(--ink); vertical-align: middle; }
+  .td-name { font-weight: 500; }
+  .td-phone { font-family: monospace; font-size: 12px; color: var(--muted); }
+  .td-email { color: var(--accent-dark); font-size: 12px; }
+  .td-loc { font-size: 12px; color: var(--muted); }
+  .td-num { font-size: 11px; color: var(--warm-mid); font-weight: 300; }
+  .row-del { background: transparent; border: none; cursor: pointer; color: var(--warm-mid); font-size: 13px; padding: 2px 5px; border-radius: 2px; }
+  .row-del:hover { color: var(--error); background: #fef0ef; }
+  .report-footer { margin-top: 1rem; display: flex; justify-content: flex-end; }
+  .btn-export {
+    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--accent-dark); background: transparent;
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: 0 1rem; height: 34px; cursor: pointer; transition: background 0.15s;
+  }
+  .btn-export:hover { background: var(--cream); }
+
+  /* Toast */
+  .toast {
+    position: fixed; bottom: 1.5rem; right: 1.5rem;
+    background: var(--accent-dark); color: #fdfaf5;
+    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 0.6rem 1.1rem; border-radius: 4px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none; z-index: 999;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div>
+      <div class="header-label">New Entry</div>
+      <h1>Contact Details</h1>
+      <p>All fields marked with * are required.</p>
+    </div>
+    <button class="btn-report" id="reportToggleBtn" onclick="toggleReport()">&#9776;&nbsp; Report</button>
+  </div>
+
+  <div class="form-card">
+    <form id="contactForm" novalidate>
+      <div class="form-section">
+        <div class="section-label">Personal Information</div>
+
+        <div class="field">
+          <label for="name">Full Name <span class="req">*</span></label>
+          <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" autocomplete="name" />
+          <div class="field-error" id="name-err">Please enter your full name.</div>
+        </div>
+
+        <div class="field">
+          <label for="email">Email Address <span class="req">*</span></label>
+          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+          <div class="field-error" id="email-err">Please enter a valid email address.</div>
+        </div>
+
+        <div class="field">
+          <label for="phone">Phone Number <span class="req">*</span></label>
+          <div class="phone-row">
+            <select id="isd" name="isd" aria-label="ISD Code"></select>
+            <input type="tel" id="phone" name="phone" placeholder="9876543210"
+              autocomplete="tel-national" inputmode="numeric" maxlength="15" />
+          </div>
+          <div class="field-hint">Select country code · numbers only · 6–15 digits.</div>
+          <div class="field-error" id="phone-err">Please enter a valid phone number (6–15 digits).</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="form-section">
+        <div class="section-label">Location</div>
+        <div class="field">
+          <label for="country">Country <span class="req">*</span></label>
+          <select id="country" name="country"><option value="">— Select Country —</option></select>
+          <div class="field-error" id="country-err">Please select your country.</div>
+        </div>
+        <div class="col-2">
+          <div class="field">
+            <label for="state">State / Province <span class="req">*</span></label>
+            <select id="state" name="state" disabled><option value="">— Select State —</option></select>
+            <div class="field-error" id="state-err">Please select a state.</div>
+          </div>
+          <div class="field">
+            <label for="city">City <span class="req">*</span></label>
+            <select id="city" name="city" disabled><option value="">— Select City —</option></select>
+            <div class="field-error" id="city-err">Please select a city.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="submit-row">
+        <span class="submit-note">Data is saved to Supabase.</span>
+        <button type="submit" class="btn-submit" id="submitBtn">Submit Entry</button>
+      </div>
+      <div class="success-banner" id="successBanner"></div>
+      <div class="error-banner" id="errorBanner"></div>
+    </form>
+  </div>
+
+  <!-- Report Panel -->
+  <div id="reportPanel">
+    <div class="report-card">
+      <div class="report-header">
+        <div>
+          <div class="report-title">Contacts Report</div>
+          <div class="report-meta" id="reportMeta"></div>
+        </div>
+        <button class="report-close" onclick="toggleReport()">✕</button>
+      </div>
+      <div id="reportBody"><div class="report-loading">Loading…</div></div>
+      <div class="report-footer">
+        <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── Supabase config ── */
+const SUPABASE_URL = 'https://vdylwdlleavqfuhzkgsr.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkeWx3ZGxsZWF2cWZ1aHprZ3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTE2MjUsImV4cCI6MjA5MTM2NzYyNX0.TxQ9EIJFOyvHk-Qf8ywoPo-BNKJBRaOveyCzMOSRSvc';
+const TABLE = 'contacts';
+
+async function sbFetch(path, options = {}) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': options.prefer || '',
+      ...(options.headers || {})
+    }
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.message || `HTTP ${res.status}`);
+  }
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function insertContact(record) {
+  return sbFetch(TABLE, {
+    method: 'POST',
+    prefer: 'return=representation',
+    body: JSON.stringify(record)
+  });
+}
+
+async function fetchContacts() {
+  return sbFetch(`${TABLE}?order=created_at.desc&select=*`);
+}
+
+async function deleteContact(id) {
+  return sbFetch(`${TABLE}?id=eq.${id}`, { method: 'DELETE' });
+}
+
+/* ── Dropdown data ── */
+const isdCodes = [
+  {code:"+91",country:"India"},{code:"+1",country:"USA / Canada"},
+  {code:"+44",country:"UK"},{code:"+61",country:"Australia"},
+  {code:"+49",country:"Germany"},{code:"+33",country:"France"},
+  {code:"+81",country:"Japan"},{code:"+86",country:"China"},
+  {code:"+971",country:"UAE"},{code:"+65",country:"Singapore"},
+  {code:"+60",country:"Malaysia"},{code:"+55",country:"Brazil"},
+  {code:"+27",country:"South Africa"},{code:"+234",country:"Nigeria"},
+  {code:"+92",country:"Pakistan"},{code:"+880",country:"Bangladesh"},
+  {code:"+94",country:"Sri Lanka"},{code:"+977",country:"Nepal"},
+  {code:"+64",country:"New Zealand"},{code:"+353",country:"Ireland"},
+  {code:"+31",country:"Netherlands"},{code:"+34",country:"Spain"},
+  {code:"+39",country:"Italy"},{code:"+7",country:"Russia"},
+  {code:"+82",country:"South Korea"},{code:"+66",country:"Thailand"},
+  {code:"+62",country:"Indonesia"},{code:"+63",country:"Philippines"},
+  {code:"+84",country:"Vietnam"},{code:"+52",country:"Mexico"},
+];
+
+const locationData = {
+  India:{
+    "Andhra Pradesh":["Visakhapatnam","Vijayawada","Guntur","Tirupati"],
+    "Delhi":["New Delhi","Dwarka","Rohini","Saket"],
+    "Gujarat":["Ahmedabad","Surat","Vadodara","Rajkot"],
+    "Karnataka":["Bengaluru","Mysuru","Mangaluru","Hubballi"],
+    "Maharashtra":["Mumbai","Pune","Nagpur","Nashik","Pimpri-Chinchwad"],
+    "Rajasthan":["Jaipur","Jodhpur","Udaipur","Kota"],
+    "Tamil Nadu":["Chennai","Coimbatore","Madurai","Salem"],
+    "Telangana":["Hyderabad","Warangal","Nizamabad","Karimnagar"],
+    "Uttar Pradesh":["Lucknow","Kanpur","Agra","Varanasi","Noida"],
+    "West Bengal":["Kolkata","Howrah","Durgapur","Siliguri"],
+  },
+  USA:{
+    "California":["Los Angeles","San Francisco","San Diego","San Jose"],
+    "Florida":["Miami","Orlando","Tampa","Jacksonville"],
+    "New York":["New York City","Buffalo","Albany","Syracuse"],
+    "Texas":["Houston","Dallas","Austin","San Antonio"],
+    "Washington":["Seattle","Spokane","Tacoma","Bellevue"],
+  },
+  "United Kingdom":{
+    "England":["London","Manchester","Birmingham","Liverpool","Bristol"],
+    "Scotland":["Edinburgh","Glasgow","Aberdeen","Dundee"],
+    "Wales":["Cardiff","Swansea","Newport","Bangor"],
+    "Northern Ireland":["Belfast","Derry","Lisburn","Newry"],
+  },
+  Australia:{
+    "New South Wales":["Sydney","Newcastle","Wollongong","Central Coast"],
+    "Queensland":["Brisbane","Gold Coast","Sunshine Coast","Townsville"],
+    "South Australia":["Adelaide","Mount Gambier","Whyalla","Port Augusta"],
+    "Victoria":["Melbourne","Geelong","Ballarat","Bendigo"],
+    "Western Australia":["Perth","Fremantle","Bunbury","Mandurah"],
+  },
+  Germany:{
+    "Bavaria":["Munich","Nuremberg","Augsburg","Würzburg"],
+    "Berlin":["Berlin"],"Hamburg":["Hamburg"],
+    "North Rhine-Westphalia":["Cologne","Düsseldorf","Dortmund","Essen"],
+    "Saxony":["Dresden","Leipzig","Chemnitz","Zwickau"],
+  },
+  UAE:{
+    "Abu Dhabi":["Abu Dhabi","Al Ain","Ruwais"],
+    "Dubai":["Dubai","Jebel Ali"],
+    "Sharjah":["Sharjah","Khor Fakkan"],
+    "Ajman":["Ajman"],
+    "Ras Al Khaimah":["Ras Al Khaimah","Al Jazirah Al Hamra"],
+  },
+};
+
+/* ── Populate ISD ── */
+const isdSel = document.getElementById('isd');
+isdCodes.forEach(d => {
+  const o = document.createElement('option');
+  o.value = d.code; o.textContent = `${d.code} ${d.country}`;
+  if (d.code === '+91') o.selected = true;
+  isdSel.appendChild(o);
+});
+
+/* ── Populate Countries ── */
+const countrySel = document.getElementById('country');
+Object.keys(locationData).forEach(c => {
+  const o = document.createElement('option'); o.value = c; o.textContent = c;
+  countrySel.appendChild(o);
+});
+
+const stateSel = document.getElementById('state');
+const citySel  = document.getElementById('city');
+
+function resetSel(sel, ph) { sel.innerHTML = `<option value="">${ph}</option>`; sel.disabled = true; }
+
+countrySel.addEventListener('change', () => {
+  resetSel(stateSel,'— Select State —'); resetSel(citySel,'— Select City —');
+  const states = locationData[countrySel.value]; if (!states) return;
+  Object.keys(states).forEach(s => { const o=document.createElement('option'); o.value=s; o.textContent=s; stateSel.appendChild(o); });
+  stateSel.disabled = false;
+});
+stateSel.addEventListener('change', () => {
+  resetSel(citySel,'— Select City —');
+  const cities = locationData[countrySel.value]?.[stateSel.value]; if (!cities) return;
+  cities.forEach(c => { const o=document.createElement('option'); o.value=c; o.textContent=c; citySel.appendChild(o); });
+  citySel.disabled = false;
+});
+
+/* ── Phone — numbers only ── */
+const phoneEl = document.getElementById('phone');
+phoneEl.addEventListener('keydown', e => {
+  const allow = ['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End'];
+  if (!allow.includes(e.key) && !/^\d$/.test(e.key) && !e.ctrlKey && !e.metaKey) e.preventDefault();
+});
+phoneEl.addEventListener('input', () => { phoneEl.value = phoneEl.value.replace(/\D/g,''); });
+phoneEl.addEventListener('paste', e => {
+  e.preventDefault();
+  const t = (e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
+  phoneEl.value = t.slice(0,15);
+});
+
+/* ── Validation helpers ── */
+function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
+function hideErr(id){document.getElementById(id).style.display='none';}
+function markErr(id){document.getElementById(id).classList.add('error');}
+function markOk(id){const el=document.getElementById(id);el.classList.remove('error');el.classList.add('valid');}
+['name','email','phone','country','state','city'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('input',()=>{el.classList.remove('error','valid');hideErr(id+'-err');});
+  el.addEventListener('change',()=>{el.classList.remove('error','valid');hideErr(id+'-err');});
+});
+
+/* ── Toast ── */
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+/* ── Submit ── */
+document.getElementById('contactForm').addEventListener('submit', async function(e){
+  e.preventDefault();
+  let ok = true;
+
+  const name = document.getElementById('name').value.trim();
+  if(!name||name.length<2){showErr('name-err','Please enter your full name.');markErr('name');ok=false;}else markOk('name');
+
+  const email = document.getElementById('email').value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('email-err','Please enter a valid email address.');markErr('email');ok=false;}else markOk('email');
+
+  const phone = phoneEl.value.trim();
+  if(!/^\d{6,15}$/.test(phone)){showErr('phone-err','Please enter a valid phone number (6–15 digits).');markErr('phone');ok=false;}else markOk('phone');
+
+  const country = countrySel.value;
+  if(!country){showErr('country-err','Please select your country.');markErr('country');ok=false;}else markOk('country');
+
+  const state = stateSel.value;
+  if(!state){showErr('state-err','Please select a state / province.');markErr('state');ok=false;}else markOk('state');
+
+  const city = citySel.value;
+  if(!city){showErr('city-err','Please select a city.');markErr('city');ok=false;}else markOk('city');
+
+  if(!ok) return;
+
+  const submitBtn = document.getElementById('submitBtn');
+  const successBanner = document.getElementById('successBanner');
+  const errorBanner = document.getElementById('errorBanner');
+  successBanner.style.display = 'none';
+  errorBanner.style.display = 'none';
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Saving…';
+
+  try {
+    await insertContact({ name, email, isd_code: isdSel.value, phone, country, state, city });
+
+    successBanner.style.display = 'block';
+    successBanner.textContent = `✓ ${name}'s contact saved successfully!`;
+    showToast('Saved to Supabase ✓');
+
+    if (reportOpen) await renderReport();
+
+    setTimeout(() => {
+      document.getElementById('contactForm').reset();
+      resetSel(stateSel,'— Select State —'); resetSel(citySel,'— Select City —');
+      ['name','email','phone','country'].forEach(id => document.getElementById(id).classList.remove('valid'));
+      successBanner.style.display = 'none';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Submit Entry';
+    }, 2200);
+
+  } catch(err) {
+    errorBanner.style.display = 'block';
+    errorBanner.textContent = `✗ Could not save: ${err.message}. Check your Supabase table exists and RLS is off.`;
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Submit Entry';
+  }
+});
+
+/* ── Report ── */
+let reportOpen = false;
+let allContacts = [];
+
+async function toggleReport(){
+  reportOpen = !reportOpen;
+  const panel = document.getElementById('reportPanel');
+  const btn   = document.getElementById('reportToggleBtn');
+  if(reportOpen){ panel.style.display='block'; btn.textContent='✕ Close'; await renderReport(); }
+  else { panel.style.display='none'; btn.innerHTML='&#9776;&nbsp; Report'; }
+}
+
+function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+async function renderReport(){
+  const body = document.getElementById('reportBody');
+  body.innerHTML = '<div class="report-loading">Loading from Supabase…</div>';
+  try {
+    allContacts = await fetchContacts() || [];
+    document.getElementById('reportMeta').textContent =
+      `${allContacts.length} contact${allContacts.length!==1?'s':''} · ${new Date().toLocaleString()}`;
+
+    if(!allContacts.length){
+      body.innerHTML='<div class="report-empty">No contacts yet. Submit the form to add the first entry.</div>';
+      return;
+    }
+
+    const rows = allContacts.map((c,i)=>`
+      <tr>
+        <td class="td-num">${i+1}</td>
+        <td class="td-name">${esc(c.name)}</td>
+        <td class="td-phone">${esc(c.isd_code)} ${esc(c.phone)}</td>
+        <td class="td-email">${esc(c.email)}</td>
+        <td class="td-loc">${esc(c.city)}, ${esc(c.state)}</td>
+        <td class="td-loc">${esc(c.country)}</td>
+        <td><button class="row-del" onclick="confirmDelete(${c.id},'${esc(c.name)}')" title="Delete">✕</button></td>
+      </tr>`).join('');
+
+    body.innerHTML=`<div class="report-table-wrap"><table>
+      <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Email</th><th>City / State</th><th>Country</th><th></th></tr></thead>
+      <tbody>${rows}</tbody></table></div>`;
+  } catch(err) {
+    body.innerHTML=`<div class="report-empty" style="color:var(--error)">Failed to load contacts: ${esc(err.message)}</div>`;
+  }
+}
+
+async function confirmDelete(id, name){
+  if(!confirm(`Delete contact "${name}"? This cannot be undone.`)) return;
+  try {
+    await deleteContact(id);
+    showToast('Contact deleted ✓');
+    await renderReport();
+  } catch(err) {
+    showToast('Delete failed: ' + err.message);
+  }
+}
+
+/* ── Export CSV ── */
+async function exportCSV(){
+  if(!allContacts.length){ showToast('No data to export'); return; }
+  const headers = ['#','Name','ISD Code','Phone','Email','Country','State','City','Created At'];
+  const rows = allContacts.map((c,i)=>[i+1,c.name,c.isd_code,c.phone,c.email,c.country,c.state,c.city,c.created_at]);
+  const csv = [headers,...rows].map(r=>r.map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a'); a.href=url;
+  a.download = `contacts-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('CSV downloaded ✓');
+}
+</script>
+</body>
+</html>
