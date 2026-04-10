@@ -4,258 +4,720 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Details</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --ink: #1a1714; --paper: #f5f0e8; --cream: #ede7d9; --warm-mid: #c8b89a;
-    --accent: #8b6f47; --accent-dark: #5c4a30; --muted: #9a8e80;
-    --error: #c0392b; --success: #2e7d5a; --input-bg: #fdfaf5;
-    --border: #d5c9b8; --border-focus: #8b6f47;
+    --bg: #0d0e11;
+    --surface: #13151a;
+    --surface-2: #1a1d24;
+    --border: rgba(255,255,255,0.07);
+    --border-active: rgba(255,255,255,0.22);
+    --accent: #c8f135;
+    --accent-dim: rgba(200,241,53,0.12);
+    --accent-glow: rgba(200,241,53,0.25);
+    --text: #f0efe8;
+    --text-2: rgba(240,239,232,0.55);
+    --text-3: rgba(240,239,232,0.3);
+    --red: #ff5e5e;
+    --green: #c8f135;
+    --input-h: 48px;
   }
+
   body {
-    font-family: 'DM Sans', sans-serif;
-    background-color: var(--paper);
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
     min-height: 100vh;
-    display: flex; align-items: flex-start; justify-content: center;
-    padding: 2rem 1rem;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 3rem 1rem 4rem;
     background-image:
-      radial-gradient(ellipse at 20% 50%, rgba(139,111,71,0.06) 0%, transparent 60%),
-      radial-gradient(ellipse at 80% 20%, rgba(139,111,71,0.04) 0%, transparent 50%);
+      radial-gradient(ellipse 60% 40% at 70% 0%, rgba(200,241,53,0.05) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 80%, rgba(200,241,53,0.03) 0%, transparent 50%);
   }
-  .container { width: 100%; max-width: 620px; animation: fadeUp 0.5s ease both; }
-  @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
 
-  .header { margin-bottom: 2rem; display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-  .header-label { font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.4rem; }
-  .header h1 { font-family: 'Playfair Display', serif; font-size: 1.9rem; font-weight: 400; color: var(--ink); line-height: 1.2; }
-  .header p { margin-top: 0.4rem; font-size: 13px; color: var(--muted); font-weight: 300; line-height: 1.6; }
+  .container {
+    width: 100%;
+    max-width: 600px;
+    animation: fadeUp 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(24px); }
+    to { opacity:1; transform:translateY(0); }
+  }
+
+  /* ── Header ── */
+  .header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .header-left { flex: 1; }
+
+  .eyebrow {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 20px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .header h1 {
+    font-size: 2.6rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 span { color: var(--accent); }
+
   .btn-report {
-    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    color: var(--accent-dark); background: transparent;
-    border: 1px solid var(--accent); border-radius: 3px;
-    padding: 0 1.25rem; height: 38px; cursor: pointer;
-    transition: background 0.2s, color 0.2s; white-space: nowrap; align-self: flex-start; margin-top: 4px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    background: transparent;
+    border: 1px solid var(--border-active);
+    border-radius: 2px;
+    padding: 0 1.25rem;
+    height: 36px;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
   }
-  .btn-report:hover { background: var(--accent); color: var(--input-bg); }
 
+  .btn-report:hover {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0e11;
+  }
+
+  /* ── Card ── */
   .form-card {
-    background: #fdfaf5; border: 1px solid var(--border); border-radius: 4px;
-    padding: 2.25rem; position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
   }
-  .form-card::before {
-    content: ''; position: absolute;
-    top: 6px; left: 6px; right: -6px; bottom: -6px;
-    border: 1px solid var(--cream); border-radius: 4px; z-index: -1;
+
+  .card-top-bar {
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent) 0%, rgba(200,241,53,0.3) 60%, transparent 100%);
   }
-  .form-section { margin-bottom: 1.75rem; }
+
+  .card-inner { padding: 2.25rem; }
+
+  /* ── Section ── */
+  .form-section { margin-bottom: 2rem; }
+
   .section-label {
-    font-size: 9px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;
-    color: var(--warm-mid); margin-bottom: 1.1rem; padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--cream);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
-  .field { margin-bottom: 1.15rem; }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── Fields ── */
+  .field { margin-bottom: 1.1rem; }
   .field:last-child { margin-bottom: 0; }
-  label { display: block; font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--muted); text-transform: uppercase; margin-bottom: 0.35rem; }
-  label span.req { color: var(--accent); margin-left: 2px; }
+
+  label {
+    display: block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-bottom: 0.4rem;
+  }
+
+  label .req { color: var(--accent); margin-left: 2px; }
+
   input, select {
-    width: 100%; height: 44px; padding: 0 0.85rem;
-    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400;
-    color: var(--ink); background: var(--input-bg);
-    border: 1px solid var(--border); border-radius: 3px; outline: none;
-    transition: border-color 0.2s, box-shadow 0.2s;
-    appearance: none; -webkit-appearance: none;
+    width: 100%;
+    height: var(--input-h);
+    padding: 0 1rem;
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--text);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
   }
-  input::placeholder { color: var(--warm-mid); font-weight: 300; }
-  input:focus, select:focus { border-color: var(--border-focus); box-shadow: 0 0 0 3px rgba(139,111,71,0.1); }
-  input:hover, select:hover { border-color: var(--accent); }
+
+  input::placeholder {
+    color: var(--text-3);
+    font-weight: 300;
+  }
+
+  input:hover, select:hover { border-color: rgba(255,255,255,0.15); }
+
+  input:focus, select:focus {
+    border-color: var(--accent);
+    background: rgba(200,241,53,0.04);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+  }
+
+  input.error, select.error {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(255,94,94,0.15);
+  }
+
+  input.valid { border-color: rgba(200,241,53,0.4); }
+
   select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b6f47' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-    background-repeat: no-repeat; background-position: right 0.85rem center;
-    padding-right: 2.25rem; cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23c8f135' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-right: 2.5rem;
+    cursor: pointer;
   }
-  select option { color: var(--ink); background: #fff; }
-  .phone-row { display: grid; grid-template-columns: 140px 1fr; gap: 8px; }
-  .col-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .field-hint { font-size: 11px; color: var(--muted); margin-top: 0.3rem; }
-  .field-error { font-size: 11px; color: var(--error); margin-top: 0.3rem; display: none; }
-  input.error, select.error { border-color: var(--error); }
-  input.valid { border-color: var(--success); }
-  .divider { height: 1px; background: var(--cream); margin: 1.5rem 0; }
-  .submit-row { display: flex; align-items: center; justify-content: space-between; margin-top: 1.75rem; flex-wrap: wrap; gap: 0.75rem; }
-  .submit-note { font-size: 11px; color: var(--muted); }
+
+  select option {
+    background: #1a1d24;
+    color: #f0efe8;
+  }
+
+  select:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .phone-row {
+    display: grid;
+    grid-template-columns: 150px 1fr;
+    gap: 8px;
+  }
+
+  .col-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .field-hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 0.35rem;
+    letter-spacing: 0.03em;
+  }
+
+  .field-error {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--red);
+    margin-top: 0.35rem;
+    display: none;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 1.75rem 0;
+  }
+
+  /* ── Submit Row ── */
+  .submit-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .submit-note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    letter-spacing: 0.05em;
+  }
+
   .btn-submit {
-    font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--input-bg); background: var(--accent-dark);
-    border: none; border-radius: 3px; padding: 0 2rem; height: 44px;
-    cursor: pointer; transition: background 0.2s, transform 0.1s;
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0d0e11;
+    background: var(--accent);
+    border: none;
+    border-radius: 4px;
+    padding: 0 2rem;
+    height: 48px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 0 24px var(--accent-glow);
   }
-  .btn-submit:hover { background: var(--accent); }
+
+  .btn-submit:hover {
+    opacity: 0.9;
+    box-shadow: 0 0 36px var(--accent-glow);
+  }
+
   .btn-submit:active { transform: scale(0.98); }
-  .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+  .btn-submit:disabled { opacity: 0.35; cursor: not-allowed; box-shadow: none; }
+
+  /* ── Banners ── */
   .success-banner {
-    display: none; background: #edf7f2; border: 1px solid #a3d4bb;
-    border-radius: 3px; padding: 0.85rem 1.25rem; margin-top: 1.25rem;
-    font-size: 13px; color: var(--success); font-weight: 500; text-align: center;
+    display: none;
+    background: rgba(200,241,53,0.08);
+    border: 1px solid rgba(200,241,53,0.25);
+    border-radius: 4px;
+    padding: 0.8rem 1.1rem;
+    margin-top: 1.25rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-align: center;
   }
+
   .error-banner {
-    display: none; background: #fef0ef; border: 1px solid #f5b8b8;
-    border-radius: 3px; padding: 0.85rem 1.25rem; margin-top: 1.25rem;
-    font-size: 13px; color: var(--error); font-weight: 500; text-align: center;
+    display: none;
+    background: rgba(255,94,94,0.08);
+    border: 1px solid rgba(255,94,94,0.25);
+    border-radius: 4px;
+    padding: 0.8rem 1.1rem;
+    margin-top: 1.25rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    letter-spacing: 0.04em;
+    text-align: center;
   }
 
-  /* Report */
-  #reportPanel { display: none; margin-top: 1.5rem; }
+  /* ── Report Panel ── */
+  #reportPanel { display: none; margin-top: 1.25rem; }
+
   .report-card {
-    background: #fdfaf5; border: 1px solid var(--border); border-radius: 4px;
-    padding: 2rem; position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
   }
-  .report-card::before {
-    content: ''; position: absolute;
-    top: 6px; left: 6px; right: -6px; bottom: -6px;
-    border: 1px solid var(--cream); border-radius: 4px; z-index: -1;
-  }
-  .report-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.5rem; }
-  .report-title { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 400; color: var(--ink); }
-  .report-meta { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  .report-close { background: transparent; border: none; font-size: 18px; color: var(--muted); cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 3px; }
-  .report-close:hover { background: var(--cream); color: var(--ink); }
-  .report-empty { text-align: center; padding: 2.5rem 1rem; font-size: 14px; color: var(--muted); }
-  .report-loading { text-align: center; padding: 2rem; font-size: 13px; color: var(--muted); }
-  .report-table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 520px; }
-  thead tr { border-bottom: 2px solid var(--cream); }
-  thead th { text-align: left; font-size: 9px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--warm-mid); padding: 0 0.75rem 0.6rem; white-space: nowrap; }
-  tbody tr { border-bottom: 1px solid var(--cream); transition: background 0.12s; }
-  tbody tr:last-child { border-bottom: none; }
-  tbody tr:hover { background: rgba(139,111,71,0.04); }
-  tbody td { padding: 0.7rem 0.75rem; color: var(--ink); vertical-align: middle; }
-  .td-name { font-weight: 500; }
-  .td-phone { font-family: monospace; font-size: 12px; color: var(--muted); }
-  .td-email { color: var(--accent-dark); font-size: 12px; }
-  .td-loc { font-size: 12px; color: var(--muted); }
-  .td-num { font-size: 11px; color: var(--warm-mid); font-weight: 300; }
-  .row-del { background: transparent; border: none; cursor: pointer; color: var(--warm-mid); font-size: 13px; padding: 2px 5px; border-radius: 2px; }
-  .row-del:hover { color: var(--error); background: #fef0ef; }
-  .report-footer { margin-top: 1rem; display: flex; justify-content: flex-end; }
-  .btn-export {
-    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    color: var(--accent-dark); background: transparent;
-    border: 1px solid var(--border); border-radius: 3px;
-    padding: 0 1rem; height: 34px; cursor: pointer; transition: background 0.15s;
-  }
-  .btn-export:hover { background: var(--cream); }
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 1.5rem; right: 1.5rem;
-    background: var(--accent-dark); color: #fdfaf5;
-    font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
-    padding: 0.6rem 1.1rem; border-radius: 4px;
-    opacity: 0; transform: translateY(8px);
-    transition: opacity 0.25s, transform 0.25s;
-    pointer-events: none; z-index: 999;
+  .report-card .card-top-bar { background: linear-gradient(90deg, rgba(200,241,53,0.3) 0%, transparent 100%); }
+
+  .report-inner { padding: 1.75rem 2rem; }
+
+  .report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
   }
+
+  .report-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+  }
+
+  .report-meta {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--text-3);
+    margin-top: 3px;
+    letter-spacing: 0.05em;
+  }
+
+  .report-close {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    font-size: 14px;
+    color: var(--text-3);
+    cursor: pointer;
+    padding: 4px 8px;
+    transition: all 0.15s;
+    line-height: 1;
+  }
+
+  .report-close:hover { border-color: var(--border-active); color: var(--text); }
+
+  .report-empty {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .report-loading {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-3);
+  }
+
+  .report-table-wrap { overflow-x: auto; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+
+  thead tr { border-bottom: 1px solid var(--border); }
+
+  thead th {
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    padding: 0 0.75rem 0.6rem;
+    white-space: nowrap;
+  }
+
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  tbody td { padding: 0.65rem 0.75rem; color: var(--text); vertical-align: middle; }
+
+  .td-name { font-weight: 600; font-size: 13px; }
+  .td-phone { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-2); }
+  .td-email { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--accent); }
+  .td-loc { font-size: 12px; color: var(--text-2); }
+  .td-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text-3); }
+
+  .row-del {
+    background: transparent;
+    border: 1px solid transparent;
+    cursor: pointer;
+    color: var(--text-3);
+    font-size: 12px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    transition: all 0.15s;
+  }
+
+  .row-del:hover { color: var(--red); border-color: rgba(255,94,94,0.3); background: rgba(255,94,94,0.08); }
+
+  .report-footer {
+    margin-top: 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+
+  .btn-export {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    background: transparent;
+    border: 1px solid var(--border-active);
+    border-radius: 3px;
+    padding: 0 1rem;
+    height: 32px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-export:hover { background: var(--surface-2); color: var(--text); }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    background: var(--surface-2);
+    border: 1px solid var(--border-active);
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    padding: 0.65rem 1.1rem;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.25s, transform 0.25s;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .toast .t-accent { color: var(--accent); }
   .toast.show { opacity: 1; transform: translateY(0); }
+
+  /* ── Country Details Card ── */
+  #countryCard {
+    display: none;
+    margin-top: 1.25rem;
+    animation: fadeUp 0.5s cubic-bezier(0.16,1,0.3,1) both;
+  }
+
+  .country-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .country-card .card-top-bar {
+    background: linear-gradient(90deg, rgba(200,241,53,0.2) 0%, transparent 100%);
+  }
+
+  .country-card-inner { padding: 1.75rem 2.25rem; }
+
+  .country-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .country-flag {
+    font-size: 2.8rem;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .country-name-block { flex: 1; min-width: 0; }
+
+  .country-official {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 2px;
+  }
+
+  .country-common-name {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .country-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .country-stat {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0.75rem 1rem;
+  }
+
+  .country-stat-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 4px;
+  }
+
+  .country-stat-value {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .country-stat-value.accent { color: var(--accent); }
+
+  .country-stat.full { grid-column: 1 / -1; }
+
+  .country-loading {
+    text-align: center;
+    padding: 2rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    letter-spacing: 0.05em;
+  }
+
+  .country-error {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    color: var(--red);
+    padding: 1rem 0;
+    text-align: center;
+  }
+
+  @media (max-width: 480px) {
+    .phone-row { grid-template-columns: 1fr; }
+    .col-2 { grid-template-columns: 1fr; }
+    .header h1 { font-size: 2rem; }
+    .country-grid { grid-template-columns: 1fr; }
+    .country-stat.full { grid-column: 1; }
+  }
 </style>
 </head>
 <body>
 <div class="container">
+
   <div class="header">
-    <div>
-      <div class="header-label">New Entry</div>
-      <h1>Contact Details</h1>
-      <p>All fields marked with * are required.</p>
+    <div class="header-left">
+      <div class="eyebrow">New Entry</div>
+      <h1>Contact<span>.</span></h1>
     </div>
-    <button class="btn-report" id="reportToggleBtn" onclick="toggleReport()">&#9776;&nbsp; Report</button>
+    <button class="btn-report" id="reportToggleBtn" onclick="toggleReport()">&#9776; Report</button>
   </div>
 
   <div class="form-card">
-    <form id="contactForm" novalidate>
-      <div class="form-section">
-        <div class="section-label">Personal Information</div>
+    <div class="card-top-bar"></div>
+    <div class="card-inner">
+      <form id="contactForm" novalidate>
 
-        <div class="field">
-          <label for="name">Full Name <span class="req">*</span></label>
-          <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" autocomplete="name" />
-          <div class="field-error" id="name-err">Please enter your full name.</div>
-        </div>
+        <div class="form-section">
+          <div class="section-label">Personal Information</div>
 
-        <div class="field">
-          <label for="email">Email Address <span class="req">*</span></label>
-          <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
-          <div class="field-error" id="email-err">Please enter a valid email address.</div>
-        </div>
-
-        <div class="field">
-          <label for="phone">Phone Number <span class="req">*</span></label>
-          <div class="phone-row">
-            <select id="isd" name="isd" aria-label="ISD Code"></select>
-            <input type="tel" id="phone" name="phone" placeholder="9876543210"
-              autocomplete="tel-national" inputmode="numeric" maxlength="15" />
-          </div>
-          <div class="field-hint">Select country code · numbers only · 6–15 digits.</div>
-          <div class="field-error" id="phone-err">Please enter a valid phone number (6–15 digits).</div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
-      <div class="form-section">
-        <div class="section-label">Location</div>
-        <div class="field">
-          <label for="country">Country <span class="req">*</span></label>
-          <select id="country" name="country"><option value="">— Select Country —</option></select>
-          <div class="field-error" id="country-err">Please select your country.</div>
-        </div>
-        <div class="col-2">
           <div class="field">
-            <label for="state">State / Province <span class="req">*</span></label>
-            <select id="state" name="state" disabled><option value="">— Select State —</option></select>
-            <div class="field-error" id="state-err">Please select a state.</div>
+            <label for="name">Full Name <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="e.g. Priya Sharma" autocomplete="name" />
+            <div class="field-error" id="name-err">Please enter your full name.</div>
           </div>
+
           <div class="field">
-            <label for="city">City <span class="req">*</span></label>
-            <select id="city" name="city" disabled><option value="">— Select City —</option></select>
-            <div class="field-error" id="city-err">Please select a city.</div>
+            <label for="email">Email Address <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="you@example.com" autocomplete="email" />
+            <div class="field-error" id="email-err">Please enter a valid email address.</div>
+          </div>
+
+          <div class="field">
+            <label for="phone">Phone Number <span class="req">*</span></label>
+            <div class="phone-row">
+              <select id="isd" name="isd" aria-label="ISD Code"></select>
+              <input type="tel" id="phone" name="phone" placeholder="9876543210"
+                autocomplete="tel-national" inputmode="numeric" maxlength="15" />
+            </div>
+            <div class="field-hint">Country code · numbers only · 6–15 digits</div>
+            <div class="field-error" id="phone-err">Please enter a valid phone number (6–15 digits).</div>
           </div>
         </div>
-      </div>
 
-      <div class="submit-row">
-        <span class="submit-note">Data is saved to Supabase.</span>
-        <button type="submit" class="btn-submit" id="submitBtn">Submit Entry</button>
+        <div class="divider"></div>
+
+        <div class="form-section">
+          <div class="section-label">Location</div>
+
+          <div class="field">
+            <label for="country">Country <span class="req">*</span></label>
+            <select id="country" name="country"><option value="">— Select Country —</option></select>
+            <div class="field-error" id="country-err">Please select your country.</div>
+          </div>
+
+          <div class="col-2">
+            <div class="field">
+              <label for="state">State / Province <span class="req">*</span></label>
+              <select id="state" name="state" disabled><option value="">— Select State —</option></select>
+              <div class="field-error" id="state-err">Please select a state.</div>
+            </div>
+            <div class="field">
+              <label for="city">City <span class="req">*</span></label>
+              <select id="city" name="city" disabled><option value="">— Select City —</option></select>
+              <div class="field-error" id="city-err">Please select a city.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="submit-row">
+          <span class="submit-note">// saved to supabase</span>
+          <button type="submit" class="btn-submit" id="submitBtn">Submit Entry</button>
+        </div>
+
+        <div class="success-banner" id="successBanner"></div>
+        <div class="error-banner" id="errorBanner"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Country Details Card -->
+  <div id="countryCard">
+    <div class="country-card">
+      <div class="card-top-bar"></div>
+      <div class="country-card-inner">
+        <div class="section-label" style="margin-bottom:1.25rem;">Country Details</div>
+        <div id="countryBody"><div class="country-loading">Fetching country data…</div></div>
       </div>
-      <div class="success-banner" id="successBanner"></div>
-      <div class="error-banner" id="errorBanner"></div>
-    </form>
+    </div>
   </div>
 
   <!-- Report Panel -->
   <div id="reportPanel">
     <div class="report-card">
-      <div class="report-header">
-        <div>
-          <div class="report-title">Contacts Report</div>
-          <div class="report-meta" id="reportMeta"></div>
+      <div class="card-top-bar"></div>
+      <div class="report-inner">
+        <div class="report-header">
+          <div>
+            <div class="report-title">Contacts Report</div>
+            <div class="report-meta" id="reportMeta"></div>
+          </div>
+          <button class="report-close" onclick="toggleReport()">✕</button>
         </div>
-        <button class="report-close" onclick="toggleReport()">✕</button>
-      </div>
-      <div id="reportBody"><div class="report-loading">Loading…</div></div>
-      <div class="report-footer">
-        <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
+        <div id="reportBody"><div class="report-loading">Loading…</div></div>
+        <div class="report-footer">
+          <button class="btn-export" onclick="exportCSV()">↓ Export CSV</button>
+        </div>
       </div>
     </div>
   </div>
+
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
 
 <script>
-/* ── Supabase config ── */
 const SUPABASE_URL = 'https://vdylwdlleavqfuhzkgsr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkeWx3ZGxsZWF2cWZ1aHprZ3NyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3OTE2MjUsImV4cCI6MjA5MTM2NzYyNX0.TxQ9EIJFOyvHk-Qf8ywoPo-BNKJBRaOveyCzMOSRSvc';
 const TABLE = 'contacts';
@@ -280,22 +742,15 @@ async function sbFetch(path, options = {}) {
 }
 
 async function insertContact(record) {
-  return sbFetch(TABLE, {
-    method: 'POST',
-    prefer: 'return=representation',
-    body: JSON.stringify(record)
-  });
+  return sbFetch(TABLE, { method: 'POST', prefer: 'return=representation', body: JSON.stringify(record) });
 }
-
 async function fetchContacts() {
   return sbFetch(`${TABLE}?order=created_at.desc&select=*`);
 }
-
 async function deleteContact(id) {
   return sbFetch(`${TABLE}?id=eq.${id}`, { method: 'DELETE' });
 }
 
-/* ── Dropdown data ── */
 const isdCodes = [
   {code:"+91",country:"India"},{code:"+1",country:"USA / Canada"},
   {code:"+44",country:"UK"},{code:"+61",country:"Australia"},
@@ -362,7 +817,6 @@ const locationData = {
   },
 };
 
-/* ── Populate ISD ── */
 const isdSel = document.getElementById('isd');
 isdCodes.forEach(d => {
   const o = document.createElement('option');
@@ -371,7 +825,6 @@ isdCodes.forEach(d => {
   isdSel.appendChild(o);
 });
 
-/* ── Populate Countries ── */
 const countrySel = document.getElementById('country');
 Object.keys(locationData).forEach(c => {
   const o = document.createElement('option'); o.value = c; o.textContent = c;
@@ -389,6 +842,7 @@ countrySel.addEventListener('change', () => {
   Object.keys(states).forEach(s => { const o=document.createElement('option'); o.value=s; o.textContent=s; stateSel.appendChild(o); });
   stateSel.disabled = false;
 });
+
 stateSel.addEventListener('change', () => {
   resetSel(citySel,'— Select City —');
   const cities = locationData[countrySel.value]?.[stateSel.value]; if (!cities) return;
@@ -396,7 +850,6 @@ stateSel.addEventListener('change', () => {
   citySel.disabled = false;
 });
 
-/* ── Phone — numbers only ── */
 const phoneEl = document.getElementById('phone');
 phoneEl.addEventListener('keydown', e => {
   const allow = ['Backspace','Delete','Tab','ArrowLeft','ArrowRight','Home','End'];
@@ -409,25 +862,26 @@ phoneEl.addEventListener('paste', e => {
   phoneEl.value = t.slice(0,15);
 });
 
-/* ── Validation helpers ── */
 function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.style.display='block';}
 function hideErr(id){document.getElementById(id).style.display='none';}
 function markErr(id){document.getElementById(id).classList.add('error');}
 function markOk(id){const el=document.getElementById(id);el.classList.remove('error');el.classList.add('valid');}
+
 ['name','email','phone','country','state','city'].forEach(id=>{
   const el=document.getElementById(id);
   el.addEventListener('input',()=>{el.classList.remove('error','valid');hideErr(id+'-err');});
   el.addEventListener('change',()=>{el.classList.remove('error','valid');hideErr(id+'-err');});
 });
 
-/* ── Toast ── */
 let toastTimer;
-function showToast(msg){
-  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
-  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2800);
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
-/* ── Submit ── */
 document.getElementById('contactForm').addEventListener('submit', async function(e){
   e.preventDefault();
   let ok = true;
@@ -461,7 +915,10 @@ document.getElementById('contactForm').addEventListener('submit', async function
   submitBtn.textContent = 'Saving…';
 
   try {
-    await insertContact({ name, email, isd_code: isdSel.value, phone, country, state, city });
+    const [_saved] = await Promise.all([
+      insertContact({ name, email, isd_code: isdSel.value, phone, country, state, city }),
+      fetchAndRenderCountry(country)
+    ]);
 
     successBanner.style.display = 'block';
     successBanner.textContent = `✓ ${name}'s contact saved successfully!`;
@@ -471,7 +928,8 @@ document.getElementById('contactForm').addEventListener('submit', async function
 
     setTimeout(() => {
       document.getElementById('contactForm').reset();
-      resetSel(stateSel,'— Select State —'); resetSel(citySel,'— Select City —');
+      resetSel(stateSel,'— Select State —');
+      resetSel(citySel,'— Select City —');
       ['name','email','phone','country'].forEach(id => document.getElementById(id).classList.remove('valid'));
       successBanner.style.display = 'none';
       submitBtn.disabled = false;
@@ -480,22 +938,120 @@ document.getElementById('contactForm').addEventListener('submit', async function
 
   } catch(err) {
     errorBanner.style.display = 'block';
-    errorBanner.textContent = `✗ Could not save: ${err.message}. Check your Supabase table exists and RLS is off.`;
+    errorBanner.textContent = `✗ Could not save: ${err.message}`;
     submitBtn.disabled = false;
     submitBtn.textContent = 'Submit Entry';
   }
 });
 
-/* ── Report ── */
+async function fetchAndRenderCountry(countryName) {
+  const card = document.getElementById('countryCard');
+  const body = document.getElementById('countryBody');
+  card.style.display = 'block';
+  body.innerHTML = '<div class="country-loading">Fetching country data…</div>';
+
+  try {
+    const res = await fetch(`https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=false`);
+    if (!res.ok) throw new Error(`API returned ${res.status}`);
+    const data = await res.json();
+    const c = data[0];
+
+    const flag = c.flag || c.flags?.emoji || '';
+    const common = c.name?.common || countryName;
+    const official = c.name?.official || '';
+    const capital = (c.capital || []).join(', ') || '—';
+    const region = [c.subregion, c.region].filter(Boolean).join(', ') || '—';
+    const pop = c.population ? Number(c.population).toLocaleString() : '—';
+    const area = c.area ? Number(c.area).toLocaleString() + ' km²' : '—';
+    const currencies = c.currencies
+      ? Object.values(c.currencies).map(cu => `${cu.name} (${cu.symbol || ''})`).join(', ')
+      : '—';
+    const languages = c.languages ? Object.values(c.languages).join(', ') : '—';
+    const timezones = (c.timezones || []).slice(0, 3).join(', ') + (c.timezones?.length > 3 ? ' …' : '');
+    const callingCode = c.idd?.root ? (c.idd.root + (c.idd.suffixes?.[0] || '')) : '—';
+    const tld = (c.tld || []).join(', ') || '—';
+    const independent = c.independent ? 'Yes' : 'No';
+    const unMember = c.unMember ? 'Yes' : 'No';
+    const drivingSide = c.car?.side ? (c.car.side.charAt(0).toUpperCase() + c.car.side.slice(1)) : '—';
+    const startOfWeek = c.startOfWeek ? (c.startOfWeek.charAt(0).toUpperCase() + c.startOfWeek.slice(1)) : '—';
+    const continents = (c.continents || []).join(', ') || '—';
+
+    body.innerHTML = `
+      <div class="country-header">
+        <div class="country-flag">${flag}</div>
+        <div class="country-name-block">
+          <div class="country-official">${esc(official)}</div>
+          <div class="country-common-name">${esc(common)}</div>
+        </div>
+      </div>
+      <div class="country-grid">
+        <div class="country-stat">
+          <div class="country-stat-label">Capital</div>
+          <div class="country-stat-value accent">${esc(capital)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Region</div>
+          <div class="country-stat-value">${esc(region)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Population</div>
+          <div class="country-stat-value">${esc(pop)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Area</div>
+          <div class="country-stat-value">${esc(area)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Calling Code</div>
+          <div class="country-stat-value">${esc(callingCode)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">TLD</div>
+          <div class="country-stat-value">${esc(tld)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">UN Member</div>
+          <div class="country-stat-value">${esc(unMember)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Driving Side</div>
+          <div class="country-stat-value">${esc(drivingSide)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Week Starts</div>
+          <div class="country-stat-value">${esc(startOfWeek)}</div>
+        </div>
+        <div class="country-stat">
+          <div class="country-stat-label">Continent</div>
+          <div class="country-stat-value">${esc(continents)}</div>
+        </div>
+        <div class="country-stat full">
+          <div class="country-stat-label">Currency</div>
+          <div class="country-stat-value">${esc(currencies)}</div>
+        </div>
+        <div class="country-stat full">
+          <div class="country-stat-label">Languages</div>
+          <div class="country-stat-value">${esc(languages)}</div>
+        </div>
+        <div class="country-stat full">
+          <div class="country-stat-label">Timezones</div>
+          <div class="country-stat-value">${esc(timezones || '—')}</div>
+        </div>
+      </div>`;
+  } catch(err) {
+    body.innerHTML = `<div class="country-error">✗ Could not fetch country data: ${esc(err.message)}</div>`;
+  }
+}
+
 let reportOpen = false;
 let allContacts = [];
 
 async function toggleReport(){
   reportOpen = !reportOpen;
   const panel = document.getElementById('reportPanel');
-  const btn   = document.getElementById('reportToggleBtn');
+  const btn = document.getElementById('reportToggleBtn');
   if(reportOpen){ panel.style.display='block'; btn.textContent='✕ Close'; await renderReport(); }
-  else { panel.style.display='none'; btn.innerHTML='&#9776;&nbsp; Report'; }
+  else { panel.style.display='none'; btn.innerHTML='&#9776; Report'; }
 }
 
 function esc(s){ return String(s??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -509,7 +1065,7 @@ async function renderReport(){
       `${allContacts.length} contact${allContacts.length!==1?'s':''} · ${new Date().toLocaleString()}`;
 
     if(!allContacts.length){
-      body.innerHTML='<div class="report-empty">No contacts yet. Submit the form to add the first entry.</div>';
+      body.innerHTML='<div class="report-empty">No contacts yet — submit the form to add the first entry.</div>';
       return;
     }
 
@@ -528,12 +1084,12 @@ async function renderReport(){
       <thead><tr><th>#</th><th>Name</th><th>Phone</th><th>Email</th><th>City / State</th><th>Country</th><th></th></tr></thead>
       <tbody>${rows}</tbody></table></div>`;
   } catch(err) {
-    body.innerHTML=`<div class="report-empty" style="color:var(--error)">Failed to load contacts: ${esc(err.message)}</div>`;
+    body.innerHTML=`<div class="report-empty" style="color:var(--red)">Failed to load: ${esc(err.message)}</div>`;
   }
 }
 
 async function confirmDelete(id, name){
-  if(!confirm(`Delete contact "${name}"? This cannot be undone.`)) return;
+  if(!confirm(`Delete "${name}"? This cannot be undone.`)) return;
   try {
     await deleteContact(id);
     showToast('Contact deleted ✓');
@@ -543,7 +1099,6 @@ async function confirmDelete(id, name){
   }
 }
 
-/* ── Export CSV ── */
 async function exportCSV(){
   if(!allContacts.length){ showToast('No data to export'); return; }
   const headers = ['#','Name','ISD Code','Phone','Email','Country','State','City','Created At'];
