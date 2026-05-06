@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Contact Details</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script>(function(){var t=localStorage.getItem('theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');})();</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -24,6 +25,34 @@
     --green: #c8f135;
     --input-h: 48px;
   }
+
+  [data-theme="light"] {
+    --bg: #f2f2ed;
+    --surface: #ffffff;
+    --surface-2: #f8f8f4;
+    --border: rgba(0,0,0,0.1);
+    --border-active: rgba(0,0,0,0.22);
+    --accent: #5c8f00;
+    --accent-dim: rgba(92,143,0,0.1);
+    --accent-glow: rgba(92,143,0,0.2);
+    --text: #0d0e11;
+    --text-2: rgba(13,14,17,0.6);
+    --text-3: rgba(13,14,17,0.38);
+    --red: #cc2e2e;
+    --green: #5c8f00;
+  }
+
+  [data-theme="light"] body {
+    background-image:
+      radial-gradient(ellipse 60% 40% at 70% 0%, rgba(92,143,0,0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 80%, rgba(92,143,0,0.04) 0%, transparent 50%);
+  }
+
+  [data-theme="light"] select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%235c8f00' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  }
+
+  [data-theme="light"] select option { background: #ffffff; color: #0d0e11; }
 
   body {
     font-family: 'Syne', sans-serif;
@@ -601,6 +630,51 @@
     .country-grid { grid-template-columns: 1fr; }
     .country-stat.full { grid-column: 1; }
   }
+
+  /* ── Theme Toggle ── */
+  .theme-toggle {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    user-select: none;
+    flex-shrink: 0;
+  }
+  .theme-toggle input { display: none; }
+  .toggle-track {
+    width: 38px;
+    height: 20px;
+    background: var(--surface-2);
+    border: 1px solid var(--border-active);
+    border-radius: 10px;
+    position: relative;
+    transition: background 0.25s, border-color 0.25s;
+  }
+  .toggle-thumb {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--text-3);
+    transition: transform 0.25s, background 0.25s;
+  }
+  .theme-toggle input:checked ~ .toggle-track {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+  }
+  .theme-toggle input:checked ~ .toggle-track .toggle-thumb {
+    transform: translateX(18px);
+    background: var(--accent);
+  }
+  .toggle-icon {
+    font-size: 13px;
+    line-height: 1;
+    color: var(--text-3);
+    transition: color 0.25s;
+  }
+  .theme-toggle:hover .toggle-icon { color: var(--text-2); }
 </style>
 </head>
 <body>
@@ -611,7 +685,15 @@
       <div class="eyebrow">New Entry</div>
       <h1>Contact<span>.</span></h1>
     </div>
-    <button class="btn-report" id="reportToggleBtn" onclick="toggleReport()">&#9776; Report</button>
+    <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+      <label class="theme-toggle" title="Toggle light / dark mode">
+        <input type="checkbox" id="themeCheck" onchange="toggleTheme()" />
+        <span class="toggle-icon">☽</span>
+        <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        <span class="toggle-icon">☀</span>
+      </label>
+      <button class="btn-report" id="reportToggleBtn" onclick="toggleReport()">&#9776; Report</button>
+    </div>
   </div>
 
   <div class="form-card">
@@ -1098,6 +1180,21 @@ async function confirmDelete(id, name){
     showToast('Delete failed: ' + err.message);
   }
 }
+
+function toggleTheme() {
+  const isLight = document.getElementById('themeCheck').checked;
+  document.documentElement.setAttribute('data-theme', isLight ? 'light' : 'dark');
+  localStorage.setItem('theme', isLight ? 'light' : 'dark');
+}
+
+(function initTheme() {
+  const saved = localStorage.getItem('theme') || 'dark';
+  if (saved === 'light') {
+    document.documentElement.setAttribute('data-theme', 'light');
+    const check = document.getElementById('themeCheck');
+    if (check) check.checked = true;
+  }
+})();
 
 async function exportCSV(){
   if(!allContacts.length){ showToast('No data to export'); return; }
